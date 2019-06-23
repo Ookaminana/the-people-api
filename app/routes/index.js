@@ -153,13 +153,12 @@ module.exports = function(app, db) {
 	
 	client.end();  
   });
-  app.get('/events/:slug', (req, res) => {
+  app.get('/notifications/:slug', (req, res) => {
     	
 	const {slug} = req.params;
 	client.connect();
 	
-	client.query('SELECT * FROM events INNER JOIN events_type ON events_type.slug = events.type INNER JOIN place ON place.slug = events.place WHERE events.slug = "' + slug + '"', function(error, result, fields){
-	
+	client.query('SELECT * FROM notifications INNER JOIN users ON users.slug = notifications.id_user WHERE notifications.slug = "' + slug + '"', function(error, result, fields){	
 		console.log("Result ", result);
 		res.json(result);
 	});	

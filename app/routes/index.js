@@ -113,19 +113,7 @@ module.exports = function(app, db) {
 	client.end();  
   });
   
-  app.get('/users', (req, res) => {
-    // Здесь будем создавать заметку.
-	
-	client.connect();
-	
-	client.query('SELECT * FROM users', function(error, result, fields){
-    console.log("Result ", result);
-	res.json(result);
-	});	
-	
-	client.end();  
-  }); 
-  
+   
   app.get('/events', (req, res) => {
     // Здесь будем создавать заметку.
 	
@@ -144,12 +132,41 @@ module.exports = function(app, db) {
 	
 	client.connect();
 	
-	client.query('SELECT * FROM events', function(error, result, fields){
+	client.query('SELECT * FROM events INNER JOIN events_type ON events_type.slug = events.type', function(error, result, fields){
     console.log("Result ", result);
 	res.json(result);
 	});	
 	
 	client.end();  
   });
+  
+  app.get('/events/:slug', (req, res) => {
+    	
+	const {slug} = req.params;
+	client.connect();
+	
+	client.query('SELECT * FROM events INNER JOIN events_type ON events_type.slug = events.type INNER JOIN place ON place.slug = events.place WHERE events.slug = "' + slug + '"', function(error, result, fields){
+	
+		console.log("Result ", result);
+		res.json(result);
+	});	
+	
+	client.end();  
+  });
+  app.get('/events/:slug', (req, res) => {
+    	
+	const {slug} = req.params;
+	client.connect();
+	
+	client.query('SELECT * FROM events INNER JOIN events_type ON events_type.slug = events.type INNER JOIN place ON place.slug = events.place WHERE events.slug = "' + slug + '"', function(error, result, fields){
+	
+		console.log("Result ", result);
+		res.json(result);
+	});	
+	
+	client.end();  
+  });
+  
+  
 };
 
